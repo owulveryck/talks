@@ -1,0 +1,149 @@
+# Gorgonia
+
+Olivier Wulveryck
+25 Aug 2020
+owulveryck@octo.com
+
+## About
+
+Gorgonia is an open-source library for numerical computation. It is written in Go.
+Think of it as an equivalent to _Tensorflow_, but in Go.
+
+.image https://gorgonia.org/images/logo/gorgonia.svg
+
+This talk is an introduction to a new computation _engine_ in Gorgonia called __GoMachine__
+
+## Agenda
+
+- Go, briefly (why Go after all)
+- Numerical computation briefly
+- How gorgonia works Gorgonia
+- The GoMachine!
+
+
+## Go
+
+Go is a **compiled, concurrent, garbage-collected, statically typed** language developed at Google. 
+
+It is an open source project: Google imports the public repository rather than the other way around.
+
+The Go programming language was conceived in late 2007 as an answer to some of the problems we were seeing developing software infrastructure at Google. 
+
+> _Go is a programming language designed by Google to help solve Google's problems, and Google has big problems._ - Rob Pike
+
+[Go at Google: Language Design in the Service of Software Engineering](https://talks.golang.org/2012/splash.article)
+
+## Why Go?
+
+*Go is 90% perfect, 100% of the time.*
+
+- Idiomatic (there is one way to _Go_)
+- Easy to write
+- Efficient native tooling (tests, benchmarks, profiling, ...)
+- Built-in concurrency
+- DevOps friendly (easy to deploy, easy to maintain, ...)
+
+## Exemple
+
+.play -edit example1/main.go
+
+## Tests
+
+.code -edit example1/main_test.go /func Test/,/^}/
+
+.code -edit example1/main_test.go /func Bench/,/^}/
+
+## Concurrency 
+
+## Greetings professor Falken, Shall we play a game?
+
+Ping and Pong:
+- gets a ball X, 
+- keep it for 200ms 
+- release the ball when he writes "pingX" on screen
+
+Each set is 5 rallies (5 balls, pong does not send the ball back to ping)
+
+Game can be multi-court (one column per court).
+
+Make it as fast as we can.
+
+## Simple Ping Pong
+
+.play -edit pingpong/1/main.go /func playerPing/,/END/
+
+## Several players
+
+.play -edit pingpong/2/main.go /func main/,/END/
+
+## Make it faster by running several players in concurrence
+
+Go has a concept of goroutine. A goroutine is a lightweight thread managed by the Go runtime.
+
+
+From the [documentation](https://golang.org/doc/effective_go.html#goroutines):
+
+> They're called goroutines because the existing terms—threads, coroutines, processes, and so on—convey inaccurate connotations. 
+
+> A goroutine has a simple model: **it is a function executing concurrently with other goroutines in the same address space**. It is lightweight, costing little more than the allocation of stack space. And the stacks start small, so they are cheap, and grow by allocating (and freeing) heap storage as required.
+
+## Usage
+
+We use the `go` keyword to send a function in a seperate goroutine.
+
+.play -edit goroutine/main.go /func add/,/END/
+
+## Several players in parallel
+
+.play -edit pingpong/3/main.go /func main/,/END/
+
+## Optimizing?
+
+Think like a player, not like the game :)
+
+a player should:
+
+- wait for the ball
+- send the ball
+- ping/pong
+
+## Go channel
+
+So synchronize the goroutines, we use channels of communication.
+
+A channel carries any go value between a sender and a receiver.
+
+A channel is like an event bus. A channel is blocking:
+
+## Example 
+
+.play -edit channels/main.go /func add/,/END/
+
+## a Single player using channel
+
+The player waits for a ball, is sleeping, and sending the ball, **when there is someone to receive it**
+
+.code -edit pingpong/5/main.go /func player/,/ENDPLAYER/
+
+## Parallel to Concurrent / Orchestration to Choreography
+
+.code -edit pingpong/5/main.go /START_LAUNCHER/,/END_PLAYER/
+
+## Sending a ball
+
+.code -edit pingpong/5/main.go /func send/,/^}/
+
+## 
+
+.play -edit pingpong/5/main.go /for play/,/END_FOR/
+
+
+## Gorgonia
+
+## Gorgonia
+
+Gorgonia is a computation library.
+
+It allows creating an expression graph, set a value, and "execute the graph".
+
+## Equations are graphs
