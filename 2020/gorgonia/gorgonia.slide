@@ -115,19 +115,15 @@ A channel carries any go value between a sender and a receiver.
 
 A channel is like an event bus. A channel is blocking:
 
-## Example 
+## channel example
 
 .play -edit channels/main.go /func add/,/END/
 
-## a Single player using channel
-
-The player waits for a ball, is sleeping, and sending the ball, **when there is someone to receive it**
-
-.code -edit pingpong/5/main.go /func player/,/ENDPLAYER/
 
 ## Parallel to Concurrent / Orchestration to Choreography
 
 .code -edit pingpong/5/main.go /START_LAUNCHER/,/END_PLAYER/
+
 
 ## Sending a ball
 
@@ -140,10 +136,48 @@ The player waits for a ball, is sleeping, and sending the ball, **when there is 
 
 ## Gorgonia
 
-## Gorgonia
+##
+Gorgonia is an open-source library for numerical computation. It is written in Go.
+Think of it as an equivalent to _Tensorflow_, but in Go.
 
-Gorgonia is a computation library.
+.image https://gorgonia.org/images/logo/gorgonia.svg
 
-It allows creating an expression graph, set a value, and "execute the graph".
+Gorgonia computes *big equations* composed of values (scalars or tensors). 
+
+It also evaluates the gradient via symbolic differentiation and automatic differentiation
+
+## Basic principles
 
 ## Equations are graphs
+
+Gorgonia is using the graph representation of a mathematical expression.
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+Let's transform this equation:
+$$f(X) = \sigma(W \cdot X+b)$$
+
+into something mode "functional":
+$$f(X) = \sigma(add(mul(W,X),B))$$
+
+##  Equations are graphs
+
+This equation can easily be represented into a graph:
+
+.image assets/graph1.png
+
+## Gorgonia workflow
+
+- Create an **expression graph**
+- Add some nodes (placeholders for values and operations)
+- Set some values in the placeholders
+- compile and run the graph 
+- extract the result
+
+## Gorgonia Example
+
+.play -edit gorgonia/1/main.go /g :=/,/fmt/
+
+##
