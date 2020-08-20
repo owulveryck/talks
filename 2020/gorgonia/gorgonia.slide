@@ -180,4 +180,38 @@ This equation can easily be represented into a graph:
 
 .play -edit gorgonia/1/main.go /g :=/,/fmt/
 
-##
+## The graph
+
+.play -edit gorgonia/2/main.go /g :=/,/}/
+
+.image gorgonia/2/graph.svg
+
+## Bigger graph Tiny Yolo v2
+
+.image assets/tiny-yolov2.svg 500 _
+
+## The Expression Graph is a program
+
+> A computer program is a collection of instructions that can be executed by a computer to perform a specific task.
+
+The program needs a machine to be executed.
+
+## Gorgonia's VM
+
+Gorgonia is using the notion of VM. The goal of a VM is
+
+- to turn the graph into a set of instructions
+- to execute those instruction.
+
+Evaluating the instructions is equivalent to calculating the mathematical expression.
+
+## Gorgonia's existing VM
+
+- The Tape Machine (based on instructions, registers, etc... conventional CPUs)
+- [The lisp machine](https://frank-buss.de/lispcpu/) (based on s-expression, aka lisp-cpu)
+
+## The Go Machine
+
+- Concurrent achitecture similar to [T9000 transputer](https://en.wikipedia.org/wiki/Transputer) 
+
+[turing tumble](https://www.youtube.com/watch?v=2e-408BJbfA)
