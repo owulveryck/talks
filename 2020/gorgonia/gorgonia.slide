@@ -104,6 +104,7 @@ Think like a player, not like the game :)
 a player should:
 
 - wait for the ball
+- play with it
 - send the ball
 - ping/pong
 
@@ -111,14 +112,20 @@ a player should:
 
 So synchronize the goroutines, we use channels of communication.
 
-A channel carries any go value between a sender and a receiver.
+A channel carries any go value between a sender and a receiver. 
 
-A channel is like an event bus. A channel is blocking:
+A channel is like an event queue. 
+
+Most important: **a channel is blocking**: it stops the execution of the goroutine until:
+
+- there is something to read (receiving channel)
+- there is a place in the queue to write something (sending channel)
 
 ## channel example
 
 .play -edit channels/main.go /func add/,/END/
 
+## Back to the ping pong
 
 ## Parallel to Concurrent / Orchestration to Choreography
 
@@ -302,6 +309,7 @@ the different channels.
 $$f(X) = \sigma(W \cdot X+b)$$
 
 .image assets/graph.svg 120 _
+
 
 ## Design and quality of code
 
