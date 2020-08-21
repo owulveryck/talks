@@ -234,17 +234,36 @@ I am `mul`, I can be in the following states:
 
 .code gorgonia/code/node.go /type node/,/}/
 
-## Implementation of the state machine
+## A state function
+
+A state function defines something that needs to be done when in a state, and returns
+a new state function.
 
 .code gorgonia/code/node.go /type stateFn/,/$/
-
-.code gorgonia/code/node.go /START_COMPUTE OMIT/,/END_COMPUTE/
 
 ## Default state
 
 .code gorgonia/code/node.go /START_DEFAULT/,/END_DEFAULT/
 
-##
+## Waiting for input state
+
+.code gorgonia/code/node.go /START_RECEIVE/,/END_RECEIVE/
+
+## Compute state
+
+.code gorgonia/code/node.go /START_COMPUTEFWD/,/END_COMPUTEFWD/
+
+## Emit output
+
+.code gorgonia/code/node.go /START_EMIT/,/END_EMIT/
+
+## Implementation of the state machine
+
+.code gorgonia/code/node.go /START_COMPUTE OMIT/,/END_COMPUTE/
+
+## Wiring...
+
+## Tracing
 
 .iframe vizu.html 550 1000
 

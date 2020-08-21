@@ -48,25 +48,25 @@ func defaultState(_ context.Context, n *node) stateFn {
 
 // START_RECEIVEINPUT_STATE OMIT
 func receiveInput(ctx context.Context, n *node) stateFn {
-	// if inputC is nil, it is a variable or a constant, don't
-	// wait for any input
-	if n.inputC == nil {
-		return computeFwd
-	}
+	if n.inputC == nil { // OMIT
+		return computeFwd // OMIT
+	} // OMIT
 	select {
 	case <-ctx.Done():
 		n.err = ctx.Err()
-		return nil
+		return nil // HL
 	case input := <-n.inputC:
-		if input.pos >= len(n.inputValues) {
-			n.err = errors.New("bad arity")
-			return nil
-		}
-		n.receivedValues++
-		n.inputValues[input.pos] = input.v
-		if n.receivedValues < len(n.inputValues) {
-			return receiveInput
-		}
+		if input.pos >= len(n.inputValues) { // OMIT
+			n.err = errors.New("bad arity") // OMIT
+			return nil                      // OMIT
+		} // OMIT
+		n.receivedValues++                 // OMIT
+		n.inputValues[input.pos] = input.v // OMIT
+		if !n.hasAllInput {
+			if n.receivedValues < len(n.inputValues) { // OMIT
+				return receiveInput
+			}
+		} // OMIT
 	}
 	return computeFwd
 }
@@ -88,9 +88,9 @@ func computeFwd(_ context.Context, n *node) stateFn {
 
 // START_EMITOUTPUT_STATE OMIT
 func emitOutput(ctx context.Context, n *node) stateFn {
-	if n == nil || n.outputC == nil {
-		return nil
-	}
+	if n == nil || n.outputC == nil { // OMIT
+		return nil // OMIT
+	} // OMIT
 	select {
 	case <-ctx.Done():
 		n.err = ctx.Err()
