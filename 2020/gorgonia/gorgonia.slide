@@ -214,4 +214,107 @@ Evaluating the instructions is equivalent to calculating the mathematical expres
 
 - Concurrent achitecture similar to [T9000 transputer](https://en.wikipedia.org/wiki/Transputer) 
 
-[turing tumble](https://www.youtube.com/watch?v=2e-408BJbfA)
+Think like a vertex!
+
+## Example
+
+$$f(X) = \sigma(W \cdot X+b)$$
+
+.image assets/graph1.png
+
+## The states of the node
+
+I am `mul`, I can be in the following states:
+
+- I am waiting for an input (X or Y)
+- I am computing `X * Y`
+- I am sending the output
+
+## What is a node
+
+.code gorgonia/code/node.go /type node/,/}/
+
+## Implementation of the state machine
+
+.code gorgonia/code/node.go /type stateFn/,/$/
+
+.code gorgonia/code/node.go /START_COMPUTE OMIT/,/END_COMPUTE/
+
+## Default state
+
+.code gorgonia/code/node.go /START_DEFAULT/,/END_DEFAULT/
+
+##
+
+.iframe vizu.html 550 1000
+
+## performances ?
+
+## Original Tiny Yolo v2
+
+```
+❯ time ./darknet detector test cfg/voc.data cfg/yolov2-tiny-voc.cfg yolov2-tiny-voc.weights dog_416x416.jpg
+
+layer     filters    size              input                output
+    0 conv     16  3 x 3 / 1   416 x 416 x   3   ->   416 x 416 x  16  0.150 BFLOPs
+    1 max          2 x 2 / 2   416 x 416 x  16   ->   208 x 208 x  16
+    2 conv     32  3 x 3 / 1   208 x 208 x  16   ->   208 x 208 x  32  0.399 BFLOPs
+    3 max          2 x 2 / 2   208 x 208 x  32   ->   104 x 104 x  32
+    4 conv     64  3 x 3 / 1   104 x 104 x  32   ->   104 x 104 x  64  0.399 BFLOPs
+    5 max          2 x 2 / 2   104 x 104 x  64   ->    52 x  52 x  64
+    6 conv    128  3 x 3 / 1    52 x  52 x  64   ->    52 x  52 x 128  0.399 BFLOPs
+    7 max          2 x 2 / 2    52 x  52 x 128   ->    26 x  26 x 128
+    8 conv    256  3 x 3 / 1    26 x  26 x 128   ->    26 x  26 x 256  0.399 BFLOPs
+    9 max          2 x 2 / 2    26 x  26 x 256   ->    13 x  13 x 256
+   10 conv    512  3 x 3 / 1    13 x  13 x 256   ->    13 x  13 x 512  0.399 BFLOPs
+   11 max          2 x 2 / 1    13 x  13 x 512   ->    13 x  13 x 512
+   12 conv   1024  3 x 3 / 1    13 x  13 x 512   ->    13 x  13 x1024  1.595 BFLOPs
+   13 conv   1024  3 x 3 / 1    13 x  13 x1024   ->    13 x  13 x1024  3.190 BFLOPs
+   14 conv    125  1 x 1 / 1    13 x  13 x1024   ->    13 x  13 x 125  0.043 BFLOPs
+   15 detection
+mask_scale: Using default '1.000000'
+Loading weights from yolov2-tiny-voc.weights...Done!
+dog_416x416.jpg: Predicted in 0.864982 seconds.
+dog: 81%
+car: 77%
+./darknet detector test cfg/voc.data cfg/yolov2-tiny-voc.cfg  dog_416x416.jpg  1.30s user 0.12s system 97% cpu 1.447 total
+```
+
+## Gorgonia
+```
+❯ GOMAXPROCS=2 ./tiny-yolo-v2-coco data/dog_416x416.jpg
+Feedforwarded in: 737.373421ms
+Detections:
+2020/08/20 18:26:49 &{0.62552494 {{36 40} {313 323}} bicycle 0.9989906}
+2020/08/20 18:26:49 &{0.61838317 {{70 153} {211 386}} dog 0.98060095}
+2020/08/20 18:26:49 &{0.8001993 {{248 62} {361 119}} car 0.8560907}
+
+❯ GOMAXPROCS=4 ./tiny-yolo-v2-coco data/dog_416x416.jpg
+Feedforwarded in: 611.368739ms
+Detections:
+2020/08/20 18:26:33 &{0.62552494 {{36 40} {313 323}} bicycle 0.9989906}
+2020/08/20 18:26:33 &{0.61838317 {{70 153} {211 386}} dog 0.98060095}
+2020/08/20 18:26:33 &{0.8001993 {{248 62} {361 119}} car 0.8560907}
+
+❯ GOMAXPROCS=8 ./tiny-yolo-v2-coco data/dog_416x416.jpg
+Feedforwarded in: 698.126672ms
+Detections:
+2020/08/20 18:26:43 &{0.62552494 {{36 40} {313 323}} bicycle 0.9989906}
+2020/08/20 18:26:43 &{0.61838317 {{70 153} {211 386}} dog 0.98060095}
+2020/08/20 18:26:43 &{0.8001993 {{248 62} {361 119}} car 0.8560907}
+```
+
+## One more thing :D
+
+```
+raspberrypi ~  ./tiny-yolo-v2-coco.arm.linux data/dog_416x416.jpg
+computing...
+Feedforwarded in: 2m57.570855173s
+Detections:
+2020/08/20 17:38:28 &{0.6255249 {{36 40} {313 323}} bicycle 0.9989906}
+2020/08/20 17:38:28 &{0.61838335 {{70 153} {211 386}} dog 0.980601}
+2020/08/20 17:38:28 &{0.80019933 {{248 62} {361 119}} car 0.85609096}
+```
+
+https://drive.google.com/drive/folders/1CThrmlK-4Z6rIcKpIYX4wmQjU491Utsr?usp=sharing
+
