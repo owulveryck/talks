@@ -212,9 +212,11 @@ Evaluating the instructions is equivalent to calculating the mathematical expres
 
 ## The Go Machine
 
+Think like a vertex!
+
+- Concurrent VM built on top of Go capabilities
 - Concurrent achitecture similar to [T9000 transputer](https://en.wikipedia.org/wiki/Transputer) 
 
-Think like a vertex!
 
 ## Example
 
@@ -261,7 +263,49 @@ a new state function.
 
 .code gorgonia/code/node.go /START_COMPUTE OMIT/,/END_COMPUTE/
 
-## Wiring...
+## Plumbing
+
+## From queues to pubsub
+
+Channels are queues: it is a one-to-one communication channel.
+
+We need to create a structure to handle the delivery of messages
+from several producers to several consumers:
+
+A publish subscribe mechanism
+
+## Publisher
+
+.code gorgonia/code/pubsub.go /type publisher/,/}/
+
+.image assets/publisher.svg
+
+## Subscriber
+
+.code gorgonia/code/pubsub.go /type subscriber/,/}/
+
+.image assets/subscriber.svg
+
+## pubsub 
+
+the pubsub structure is an aggregate of publishers.
+
+Running the pubsub, is triggering a mechanism of merge and broadcast to 
+the different channels.
+
+.code gorgonia/code/pubsub.go /type pubsub/,/}/
+
+.code gorgonia/code/pubsub.go /func/,/{/
+
+## Equation
+
+$$f(X) = \sigma(W \cdot X+b)$$
+
+.image assets/graph.svg 120 _
+
+## Design and quality of code
+
+## Example
 
 ## Tracing
 
@@ -323,7 +367,27 @@ Detections:
 2020/08/20 18:26:43 &{0.8001993 {{248 62} {361 119}} car 0.8560907}
 ```
 
-## One more thing :D
+## One more thing...
+
+## Go is turing complete
+
+So it is easy to create binaries for other plateforms:
+
+
+```
+GOOS=windows go build -o tiny-yolo.exe
+GOOS=darwin go build -o tiny-yolo.darwin
+GOOS=linux go build -o tiny-yolo.linux
+```
+
+and ...
+
+
+```
+GOOS=linux GOARCH=arm GOARM=6 go build -o tiny-yolo-v2-coco.arm6.linux
+```
+
+## And it really works
 
 ```
 raspberrypi ~  ./tiny-yolo-v2-coco.arm.linux data/dog_416x416.jpg
@@ -335,5 +399,7 @@ Detections:
 2020/08/20 17:38:28 &{0.80019933 {{248 62} {361 119}} car 0.85609096}
 ```
 
-https://drive.google.com/drive/folders/1CThrmlK-4Z6rIcKpIYX4wmQjU491Utsr?usp=sharing
+Test it by yourself:
+
+[https://drive.google.com/drive/folders/1CThrmlK-4Z6rIcKpIYX4wmQjU491Utsr?usp=sharing](https://drive.google.com/drive/folders/1CThrmlK-4Z6rIcKpIYX4wmQjU491Utsr?usp=sharinga)
 

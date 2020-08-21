@@ -1,0 +1,20 @@
+digraph G {
+    rankdir=LR
+    W -> subscriber1
+    X -> subscriber1
+    subscriber1 [shape=box]
+    subscriber1 -> publisher1 
+    publisher1 [shape=box]
+    publisher1 -> mul
+    mul -> subscriber2
+    b -> subscriber2
+    subscriber2 [shape=box]
+    subscriber2 -> publisher2 
+    publisher2 [shape=box]
+    publisher2 -> add
+    add -> subscriber3
+    subscriber3 [shape=box]
+    subscriber3 -> publisher3 
+    publisher3 [shape=box]
+    publisher3 -> σ
+}

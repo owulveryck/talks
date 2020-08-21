@@ -1,0 +1,13 @@
+digraph G {
+    publisher [shape=box]
+    src -> publisher
+    publisher -> a
+    publisher -> b
+    publisher -> c
+    publisher -> d [style=dashed]
+    src [shape=point]
+    a [shape=point]
+    b [shape=point]
+    c [shape=point]
+    d [shape=point]
+}

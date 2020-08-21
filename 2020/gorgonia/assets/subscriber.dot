@@ -1,0 +1,13 @@
+digraph G {
+    subscriber [shape=box]
+    subscriber -> src
+    a -> subscriber
+    b -> subscriber 
+    c -> subscriber 
+    d -> subscriber [style=dashed]
+    src [shape=point]
+    a [shape=point]
+    b [shape=point]
+    c [shape=point]
+    d [shape=point]
+}
